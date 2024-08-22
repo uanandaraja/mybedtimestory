@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/db/db";
 import { stories } from "@/app/db/schema";
+import { currentUser } from "@clerk/nextjs/server";
+import { nanoid } from "nanoid";
 
 export async function POST(req: Request) {
   const { prompt } = await req.json();
+  const user = await currentUser();
+
+  if (!user) {
+    return new Response("Unauthorized", { status: 401 });
+  }
 
   // Call Groq API to generate story
   const storyResponse = await fetch(
@@ -36,6 +43,8 @@ export async function POST(req: Request) {
 
   const storyData = await storyResponse.json();
   const { title, content } = JSON.parse(storyData.choices[0].message.content);
+  const userId = user.id;
+  const id = nanoid();
   console.log("title", title);
   console.log("content", content);
 
@@ -43,9 +52,10 @@ export async function POST(req: Request) {
   const story = await db
     .insert(stories)
     .values({
+      id,
       title,
       content,
-      // userId,
+      userId,
     })
     .returning();
 

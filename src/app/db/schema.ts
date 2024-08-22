@@ -1,17 +1,11 @@
 import { pgTable, serial, varchar, timestamp, text } from "drizzle-orm/pg-core";
 
-export const users = pgTable("users", {
-  id: serial("id").primaryKey(),
-  fullName: varchar("full_name", { length: 255 }),
-  createdAt: timestamp("created_at").defaultNow(),
-});
-
 export const stories = pgTable("stories", {
-  id: serial("id").primaryKey(),
-  title: varchar("title", { length: 255 }),
+  id: text("id").primaryKey(),
+  title: text("title"),
   content: text("content"),
   createdAt: timestamp("created_at").defaultNow(),
-  userId: serial("user_id").references(() => users.id),
+  userId: text("user_id"),
 });
 
 export const images = pgTable("images", {

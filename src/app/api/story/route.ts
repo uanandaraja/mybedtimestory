@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/db/db";
-import { stories } from "@/app/db/schema";
+import { eq } from "drizzle-orm";
+import { stories, images } from "@/app/db/schema";
 import { currentUser } from "@clerk/nextjs/server";
 import { nanoid } from "nanoid";
 
@@ -44,7 +45,7 @@ export async function POST(req: Request) {
   const storyData = await storyResponse.json();
   const { title, content } = JSON.parse(storyData.choices[0].message.content);
   const userId = user.id;
-  const id = nanoid();
+  const story_id = nanoid();
   console.log("title", title);
   console.log("content", content);
 
@@ -52,7 +53,7 @@ export async function POST(req: Request) {
   const story = await db
     .insert(stories)
     .values({
-      id,
+      id: story_id,
       title,
       content,
       userId,
@@ -121,6 +122,16 @@ export async function POST(req: Request) {
 
   const imageData = await imageResponse.json();
   console.log("image requested");
+
+  const image_id = imageData.id;
+
+  await db.insert(images).values({
+    id: image_id,
+    storyId: story_id,
+    status: "starting",
+  });
+
+  console.log("image request data sent to db");
 
   return NextResponse.json({ story, imageId: imageData.id });
 }

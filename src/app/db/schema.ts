@@ -9,9 +9,9 @@ export const stories = pgTable("stories", {
 });
 
 export const images = pgTable("images", {
-  id: serial("id").primaryKey(),
-  storyId: serial("story_id").references(() => stories.id),
-  imageUrl: varchar("image_url", { length: 255 }),
-  status: varchar("status", { length: 50 }),
+  id: text("id").primaryKey(),
+  storyId: text("story_id").references(() => stories.id),
+  imageUrl: text("image_url"),
+  status: text("status"),
   createdAt: timestamp("created_at").defaultNow(),
 });

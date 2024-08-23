@@ -20,7 +20,7 @@ export function StoryGenerator() {
 
   const generateStory = useMutation({
     mutationFn: async (prompt: string) => {
-      const response = await fetch("/api/story", {
+      const response = await fetch("/api/generatestory", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,14 +52,14 @@ export function StoryGenerator() {
   ];
 
   return (
-    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
-      <Card className="w-full max-w-2xl rounded-2xl">
+    <div className="flex flex-col items-center justify-center">
+      <Card className="w-fulll rounded-2xl">
         <CardHeader>
-          <CardTitle className="text-3xl sm:text-4xl text-center">
-            Write a bedtime story
+          <CardTitle className="text-3xl sm:text-3xl text-center">
+            Write your bedtime story
           </CardTitle>
-          <CardDescription className="text-xl text-center">
-            What magical tale shall we weave tonight?
+          <CardDescription className="text-sm text-center">
+            What magical tale shall we weave tonight, {user?.firstName}?
           </CardDescription>
         </CardHeader>
         <CardContent>

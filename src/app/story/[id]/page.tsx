@@ -7,6 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { EB_Garamond } from "next/font/google";
 import { Suspense } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 const garamond = EB_Garamond({ subsets: ["latin"] });
 
@@ -32,7 +34,7 @@ async function getImage(storyId: string) {
       return imageResult[0];
     }
 
-    await delay(2000); // Wait 2 seconds before trying again
+    await delay(500); // Wait 2 seconds before trying again
   }
 }
 
@@ -41,7 +43,7 @@ function ImageComponent({ storyId }: { storyId: string }) {
     getImage(storyId).then((image) => ({
       default: () => (
         <Image
-          src={image.imageUrl}
+          src={image.imageUrl!}
           alt="Story illustration"
           width={1000}
           height={400}
@@ -73,7 +75,7 @@ export default async function StoryPage({
     <div className="container mx-auto px-4 py-8">
       <Card
         className={cn(
-          "max-w-2xl mx-auto bg-white border shadow-md text-black rounded-xl p-2",
+          "max-w-2xl mx-auto bg-white border shadow-md text-black rounded-3xl p-2",
         )}
       >
         <CardHeader>
@@ -92,6 +94,17 @@ export default async function StoryPage({
           </div>
         </CardContent>
       </Card>
+      <div className="fixed bottom-0 left-0 right-0 p-4 text-white flex justify-center">
+        <Link href="/story">
+          <Button
+            variant="secondary"
+            size="lg"
+            className="font-semibold shadow-[0_4px_14px_0_rgb(0,118,255,39%)] hover:shadow-[0_6px_20px_rgba(0,118,255,23%)] transition duration-200 rounded-3xl"
+          >
+            ⬅️ Back to Story
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 }

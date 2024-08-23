@@ -1,21 +1,22 @@
 "use client";
-
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import { Button } from "./ui/button";
+import { useUser } from "@clerk/nextjs";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
-import { Input } from "./ui/input";
+  CardDescription,
+} from "@/components/ui/card";
 
 export function StoryGenerator() {
   const router = useRouter();
   const [prompt, setPrompt] = useState("");
+  const { user } = useUser();
 
   const generateStory = useMutation({
     mutationFn: async (prompt: string) => {
@@ -36,55 +37,72 @@ export function StoryGenerator() {
     },
   });
 
-  // const generateImage = useMutation({
-  //   mutationFn: async (storyId: string) => {
-  //     const response = await fetch("/api/generate-image", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ storyId }),
-  //     });
-  //     if (!response.ok) {
-  //       throw new Error("Failed to generate image");
-  //     }
-  //     return response.json();
-  //   },
-  // });
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (prompt.trim()) {
+      generateStory.mutate(prompt);
+    }
+  };
+
+  const suggestions = [
+    "A little star's adventure to brighten the night sky",
+    "The brave teddy bear who protected dreams",
+    "A magical treehouse that travels through time",
+    "A friendly monster who helps kids fall asleep",
+  ];
 
   return (
-    <Card className="w-full max-w-3xl mx-auto">
-      <CardContent>
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none">
-                  Bring your imagination to life
-                </h1>
-                <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl dark:text-gray-400">
-                  Create magical stories for you and your little ones with our
-                  AI-powered story generator.
-                </p>
-              </div>
-              <div className="w-full max-w-sm space-y-2">
-                <Input
-                  className="max-w-lg flex-1"
-                  placeholder="Enter a story idea..."
-                  type="text"
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                />
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center p-4">
+      <Card className="w-full max-w-2xl rounded-2xl">
+        <CardHeader>
+          <CardTitle className="text-3xl sm:text-4xl text-center">
+            Write a bedtime story
+          </CardTitle>
+          <CardDescription className="text-xl text-center">
+            What magical tale shall we weave tonight?
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex space-x-2">
+              <Input
+                placeholder="Enter your story idea..."
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                disabled={generateStory.isPending}
+              />
+              <Button
+                type="submit"
+                disabled={generateStory.isPending || !prompt.trim()}
+              >
+                {generateStory.isPending ? "Creating..." : "Create"}
+              </Button>
+            </div>
+          </form>
+
+          <div className="mt-8">
+            <h3 className="text-sm font-semibold mb-2">Try one of these:</h3>
+            <div className="flex flex-wrap gap-2">
+              {suggestions.map((suggestion, index) => (
                 <Button
-                  onClick={() => generateStory.mutate(prompt)}
-                  disabled={generateStory.isPending || !prompt.trim()}
+                  key={index}
+                  className="text-xs rounded-3xl"
+                  variant="outline"
+                  onClick={() => setPrompt(suggestion)}
                 >
-                  {generateStory.isPending ? "Generating..." : "Generate Story"}
+                  {suggestion}
                 </Button>
-              </div>
+              ))}
             </div>
           </div>
-        </section>
-      </CardContent>
-      <CardFooter className="flex justify-between"></CardFooter>
-    </Card>
+
+          {generateStory.isError && (
+            <p className="text-destructive mt-4 text-center">
+              Error creating story. Please try again.
+            </p>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 }

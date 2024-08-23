@@ -25,13 +25,37 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         messages: [
           {
+            role: "system",
+            content:
+              "You are a skilled children's storyteller, known for creating engaging, imaginative, and age-appropriate bedtime stories with rich narratives and proper structure.",
+          },
+          {
             role: "user",
-            content: `Generate a children's story based on: ${prompt}. Output in JSON format with title and content keys.`,
+            content: `Create an enchanting bedtime story for children based on this prompt: ${prompt}.
+
+            Guidelines:
+            - The story should be suitable for children aged 4-8.
+            - Include a clear beginning, middle, and end.
+            - Incorporate gentle life lessons or positive messages.
+            - Use vivid, child-friendly language and descriptions.
+            - Aim for a story length of about 500-700 words.
+            - Include dialogue between characters.
+            - Structure the story in 5-7 paragraphs, with clear paragraph breaks.
+            - Each paragraph should be 3-5 sentences long.
+            - End with a satisfying and comforting conclusion.
+
+            Output the result in JSON format with 'title' and 'content' keys. Use '\\n\\n' to denote paragraph breaks in the content.
+
+            Example format:
+            {
+              "title":"The Brave Little Cloud",
+              "content":"Once upon a time, in a sky full of fluffy white clouds, there lived a small, curious cloud named Wispy. Unlike the other clouds who were content to float lazily across the sky, Wispy always wondered what lay beyond the horizon.\\n\\nOne day, Wispy decided to go on an adventure. 'I'm going to explore the whole wide world!' he announced to his cloud friends. The older clouds chuckled and warned him about the dangers of straying too far, but Wispy was determined.\\n\\n[... continue with 3-5 more paragraphs ...]\\n\\nAs the sun began to set, Wispy realized that home wasn't just a place, but the feeling of being surrounded by those who care about you. With a heart full of new experiences and wisdom, Wispy floated back to his cloud family, ready to share his amazing adventure."
+            }`,
           },
         ],
         model: "llama-3.1-70b-versatile",
         temperature: 1,
-        max_tokens: 1024,
+        max_tokens: 4096,
         top_p: 1,
         stream: false,
         stop: null,
@@ -108,7 +132,7 @@ export async function POST(req: Request) {
           prompt: `GHIBSKY style, ${imagePrompt}`,
           lora_scale: 1,
           num_outputs: 1,
-          aspect_ratio: "9:16",
+          aspect_ratio: "16:9",
           output_format: "jpg",
           guidance_scale: 3.5,
           output_quality: 100,

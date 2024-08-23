@@ -99,7 +99,7 @@ export default async function StoryPage({
           <Button
             variant="secondary"
             size="lg"
-            className="font-semibold shadow-[0_4px_14px_0_rgb(0,118,255,39%)] hover:shadow-[0_6px_20px_rgba(0,118,255,23%)] transition duration-200 rounded-3xl"
+            className="font-semibold shadow-2xl rounded-3xl"
           >
             ⬅️ Back to Story
           </Button>

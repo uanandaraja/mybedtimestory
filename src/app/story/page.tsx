@@ -16,6 +16,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import Link from "next/link";
+import StoryNavbar from "@/components/StoryNavbar";
 
 interface Story {
   id: string;
@@ -80,63 +81,65 @@ export default function StoryPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        <StoryGenerator />
-        <div className="mt-8">
-          <h2 className="text-2xl font-bold mb-4">Your Stories</h2>
-          <div className="grid gap-6 md:grid-cols-2">
-            {paginatedStories.map((story) => (
-              <Link href={`/story/${story.id}`} key={story.id} passHref>
-                <Card className="cursor-pointer transition-shadow hover:shadow-lg">
-                  <CardHeader>
-                    <CardTitle>{story.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="mb-4 line-clamp-3">{story.content}</p>
-                    {story.images && story.images.length > 0 && (
-                      <div className="relative w-full h-48">
-                        <Image
-                          src={story.images[0].imageUrl}
-                          alt={story.title}
-                          fill
-                          style={{ objectFit: "cover" }}
-                        />
-                      </div>
-                    )}
-                  </CardContent>
-                </Card>
-              </Link>
-            ))}
-          </div>
-          <Pagination className="mt-8">
-            <PaginationContent>
-              <PaginationItem>
-                <PaginationPrevious
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                />
-              </PaginationItem>
-              {[...Array(totalPages)].map((_, index) => (
-                <PaginationItem key={index}>
-                  <PaginationLink
-                    onClick={() => setCurrentPage(index + 1)}
-                    isActive={currentPage === index + 1}
-                  >
-                    {index + 1}
-                  </PaginationLink>
-                </PaginationItem>
+    <div className="min-h-screen bg-gray-100">
+      <StoryNavbar />
+      <div className="py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <StoryGenerator />
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4">Your Stories</h2>
+            <div className="grid gap-6 md:grid-cols-2">
+              {paginatedStories.map((story) => (
+                <Link href={`/story/${story.id}`} key={story.id} passHref>
+                  <Card className="cursor-pointer transition-shadow hover:shadow-lg">
+                    <CardHeader>
+                      <CardTitle className="text-lg">{story.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      {story.images && story.images.length > 0 && (
+                        <div className="relative w-full h-48">
+                          <Image
+                            src={story.images[0].imageUrl}
+                            alt={story.title}
+                            fill
+                            style={{ objectFit: "cover" }}
+                          />
+                        </div>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Link>
               ))}
-              <PaginationItem>
-                <PaginationNext
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                />
-              </PaginationItem>
-            </PaginationContent>
-          </Pagination>
+            </div>
+            <Pagination className="mt-8">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                  />
+                </PaginationItem>
+                {[...Array(totalPages)].map((_, index) => (
+                  <PaginationItem key={index}>
+                    <PaginationLink
+                      onClick={() => setCurrentPage(index + 1)}
+                      isActive={currentPage === index + 1}
+                    >
+                      {index + 1}
+                    </PaginationLink>
+                  </PaginationItem>
+                ))}
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          </div>
         </div>
       </div>
     </div>

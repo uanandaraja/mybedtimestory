@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/app/db/db";
 import { stories, images } from "@/app/db/schema";
-import { eq } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -15,7 +15,8 @@ export async function GET(request: Request) {
     const userStories = await db
       .select()
       .from(stories)
-      .where(eq(stories.userId, userId));
+      .where(eq(stories.userId, userId))
+      .orderBy(desc(stories.createdAt));
 
     const storiesWithImages = await Promise.all(
       userStories.map(async (story) => {

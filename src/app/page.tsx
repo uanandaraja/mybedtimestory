@@ -26,10 +26,10 @@ export default function Home() {
           Bedtime Stories, Reimagined
         </h1>
         <p className="text-xl sm:text-2xl mb-8 max-w-2xl">
-          Spark your child imagination with AI-generated, personalized bedtime
+          Spark your child imagination with their own personalized bedtime
           tales.
         </p>
-        <Button onClick={handleCreateStory}>Create a Bedtime Story</Button>
+        <Button onClick={handleCreateStory}>Create Your Bedtime Story</Button>
       </main>
     </div>
   );

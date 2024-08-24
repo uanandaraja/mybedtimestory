@@ -9,6 +9,7 @@ import { EB_Garamond } from "next/font/google";
 import { Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import StoryImage from "./StoryImage";
 
 const garamond = EB_Garamond({ subsets: ["latin"] });
 
@@ -18,50 +19,6 @@ async function getStory(id: string) {
     throw new Error("Story not found");
   }
   return storyResult[0];
-}
-
-async function getImage(storyId: string) {
-  const delay = (ms: number) =>
-    new Promise((resolve) => setTimeout(resolve, ms));
-
-  while (true) {
-    const imageResult = await db
-      .select()
-      .from(images)
-      .where(eq(images.storyId, storyId));
-
-    if (imageResult[0]?.imageUrl) {
-      return imageResult[0];
-    }
-
-    await delay(500); // Wait 2 seconds before trying again
-  }
-}
-
-function ImageComponent({ storyId }: { storyId: string }) {
-  const ImageWithRetry = React.lazy(() =>
-    getImage(storyId).then((image) => ({
-      default: () => (
-        <Image
-          src={image.imageUrl!}
-          alt="Story illustration"
-          width={1000}
-          height={400}
-          className="w-full h-auto rounded-md"
-        />
-      ),
-    })),
-  );
-
-  return (
-    <Suspense
-      fallback={
-        <div className="w-full h-64 bg-gray-200 animate-pulse rounded-md"></div>
-      }
-    >
-      <ImageWithRetry />
-    </Suspense>
-  );
 }
 
 export default async function StoryPage({
@@ -87,7 +44,7 @@ export default async function StoryPage({
         </CardHeader>
         <CardContent>
           <div className="mb-4">
-            <ImageComponent storyId={params.id} />
+            <StoryImage storyId={params.id} />
           </div>
           <div className={`${garamond.className} text-lg whitespace-pre-wrap`}>
             {story.content}

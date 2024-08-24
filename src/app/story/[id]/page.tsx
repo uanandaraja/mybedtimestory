@@ -1,17 +1,34 @@
 import React from "react";
 import { db } from "@/app/db/db";
-import { stories, images } from "@/app/db/schema";
+import { stories } from "@/app/db/schema";
 import { eq } from "drizzle-orm";
-import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { EB_Garamond } from "next/font/google";
-import { Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import StoryImage from "./StoryImage";
+import { Metadata, ResolvingMetadata } from "next";
 
 const garamond = EB_Garamond({ subsets: ["latin"] });
+
+type Props = {
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  const id = params.id;
+  const story = await getStory(id);
+
+  return {
+    title: story.title,
+    description: `Read the bedtime story: ${story.title}`,
+  };
+}
 
 async function getStory(id: string) {
   const storyResult = await db.select().from(stories).where(eq(stories.id, id));

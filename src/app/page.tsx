@@ -6,15 +6,8 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  BookOpen,
-  Sparkles,
-  Clock,
-  Users,
-  Facebook,
-  Twitter,
-  Instagram,
-} from "lucide-react";
+import { BookOpen, Sparkles, Clock, Users } from "lucide-react";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   const { isSignedIn } = useUser();
@@ -103,7 +96,7 @@ export default function Home() {
               Ready to Create Magical Moments?
             </h2>
             <p className="text-xl mb-8 max-w-2xl mx-auto text-muted-foreground">
-              Join thousands of parents who are enriching their children's
+              Join thousands of parents who are enriching their children&apos;s
               bedtime routine with our AI-generated stories.
             </p>
             <Button size="lg" onClick={handleCreateStory}>
@@ -111,90 +104,9 @@ export default function Home() {
             </Button>
           </div>
         </section>
-      </main>
 
-      {/* Footer */}
-      <footer className="bg-muted py-12 px-4">
-        <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div>
-              <h3 className="font-bold text-lg mb-4">AI Bedtime Stories</h3>
-              <p className="text-sm text-muted-foreground">
-                Inspiring young minds with personalized AI-generated stories.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/about"
-                    className="text-sm text-muted-foreground hover:text-primary"
-                  >
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/faq"
-                    className="text-sm text-muted-foreground hover:text-primary"
-                  >
-                    FAQ
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/privacy"
-                    className="text-sm text-muted-foreground hover:text-primary"
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/terms"
-                    className="text-sm text-muted-foreground hover:text-primary"
-                  >
-                    Terms of Service
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-bold text-lg mb-4">Connect With Us</h3>
-              <div className="flex space-x-4">
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-primary"
-                >
-                  <Facebook className="w-6 h-6" />
-                  <span className="sr-only">Facebook</span>
-                </Link>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-primary"
-                >
-                  <Twitter className="w-6 h-6" />
-                  <span className="sr-only">Twitter</span>
-                </Link>
-                <Link
-                  href="#"
-                  className="text-muted-foreground hover:text-primary"
-                >
-                  <Instagram className="w-6 h-6" />
-                  <span className="sr-only">Instagram</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="mt-8 pt-8 border-t border-muted-foreground/20 text-center">
-            <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} AI Bedtime Stories. All rights
-              reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
+        <Footer />
+      </main>
     </div>
   );
 }
